@@ -1,31 +1,39 @@
 #!/bin/bash
 
-list_nginx_domains() {
-    local nginx_conf_dir="/etc/nginx/sites-available/"
-    if [ ! -d "$nginx_conf_dir" ]; then
-        echo "Nginx configuration directory $nginx_conf_dir does not exist."
-        return 1
-    fi
+NGINX_SITES_AVAILABLE="/etc/nginx/sites-available/"
+NGINX_SITES_ENABLED="/etc/nginx/sites-enabled/"
 
-    echo "Nginx Domains and Ports:"
-    grep -H -E 'server_name|listen' "${nginx_conf_dir}"* | awk '
-        /server_name/ {domain=$2}
-        /listen/ {print "Domain:", domain, "Port:", $2}
-    ' | column -t -s ' '
+list_nginx_domains() {
+    if [ -d "$NGINX_SITES_AVAILABLE" ]; then
+        printf "%-20s %-30s %-30s\n" "Domain" "Proxy" "Conf File"
+        printf "%-20s %-30s %-30s\n" "------" "-----" "---------"
+        
+        for site in $NGINX_SITES_AVAILABLE*; do
+            domain=$(basename "$site")
+            proxy=$(grep -Eo 'proxy_pass http://[^;]+' "$site" | awk '{print $2}' | head -n 1)
+            port=$(grep -Eo 'listen [0-9]{1,5};' "$site" | grep -Eo '[0-9]{1,5}' | head -n 1)
+
+            if [ -z "$proxy" ]; then
+                proxy="localhost:$port"
+            fi
+            
+            conf_file="$NGINX_SITES_ENABLED$domain"
+
+            printf "%-20s %-30s %-30s\n" "$domain" "$proxy" "$conf_file"
+        done
+    else
+        echo "Nginx configuration directory $NGINX_SITES_AVAILABLE does not exist."
+    fi
 }
 
 get_nginx_domain_info() {
-    local domain=$1
-    local nginx_conf_dir="/etc/nginx/sites-available/"
-    if [ ! -d "$nginx_conf_dir" ]; then
-        echo "Nginx configuration directory $nginx_conf_dir does not exist."
-        return 1
+    domain="$1"
+    site_file="$NGINX_SITES_AVAILABLE$domain"
+    if [ -f "$site_file" ]; then
+        echo "Nginx configuration for domain $domain:"
+        cat "$site_file"
+    else
+        echo "Nginx configuration file for domain $domain does not exist."
     fi
-
-    echo "Nginx Configuration for $domain:"
-    grep -A 10 "$domain" "${nginx_conf_dir}"*
 }
-
-# Ensure script is executable
-chmod +x fetch_nginx.sh
 
