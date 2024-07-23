@@ -72,10 +72,10 @@ else
                 ;;
             -t | --time )
                 shift
-                if [ "$1" ] && [ "$2" ]; then
-                    get_activities_in_time_range $1 $2
+                if [ "$1" ]; then
+                    get_activities_in_time_range $1
                 else
-                    echo "Please provide both start and end time."
+                    echo "Please provide a date in the format YYYY-MM-DD.."
                     exit 1
                 fi
                 exit
@@ -85,8 +85,7 @@ else
                 exit
                 ;;
             * )
-                display_help
-                exit 1
+                display_help                exit 1
         esac
         shift
     done
