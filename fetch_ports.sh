@@ -3,7 +3,7 @@
 # Function to list all active ports and services
 get_active_ports() {
     echo -e "USER\tPORT\tSERVICE"
-    netstat -tuln | awk 'NR>2 {print $1"\t"$4"\t"$6}'
+    netstat -tuln | awk 'NR>2 {print $1"\t"$4"\t"$6}' | column -t -s $'\t'
 }
 
 # Function to display detailed information about a specific port
@@ -21,7 +21,7 @@ get_port_info() {
         echo "No information found for port $port."
     else
         echo -e "USER\tPORT\tSERVICE"
-        echo "$port_info" | awk '{print $1"\t"$4"\t"$6}'
+        echo "$port_info" | awk '{print $1"\t"$4"\t"$6}' | column -t -s $'\t'
     fi
 }
 
