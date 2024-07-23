@@ -5,7 +5,10 @@ sudo apt update
 sudo apt install -y net-tools docker.io finger
 
 # Make scripts executable
-chmod +x devopsfetch.sh fetch_ports.sh fetch_docker.sh fetch_nginx.sh fetch_users.sh fetch_time.sh
+chmod +x devopsfetch fetch_ports.sh fetch_docker.sh fetch_nginx.sh fetch_users.sh fetch_time.sh
+
+# Copy the main script to /usr/local/bin
+sudo cp devopsfetch /usr/local/bin/devopsfetch
 
 # Create systemd service file
 cat <<EOF | sudo tee /etc/systemd/system/devopsfetch.service
@@ -14,7 +17,7 @@ Description=DevOps Fetch Service
 After=network.target
 
 [Service]
-ExecStart=$(pwd)/devopsfetch.sh
+ExecStart=$(pwd)/devopsfetch
 Restart=always
 User=$(whoami)
 Group=$(whoami)
