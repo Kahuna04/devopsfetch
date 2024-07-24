@@ -28,7 +28,7 @@ sudo apt install -y net-tools docker.io finger
    Clone the `devopsfetch` repository from GitHub:
 
    ```bash
-   git clone https://github.com/your-repository/devopsfetch.git
+   git clone https://github.com/kahuna04/devopsfetch.git
    cd devopsfetch
    ```
 
