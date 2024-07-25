@@ -12,15 +12,15 @@ source /home/ubuntu/devopsfetch/fetch_time.sh
 display_help() {
     echo "Usage: $0 [option] [argument]"
     echo "Options:"
-    echo "  -p, --port [port_number]    Display active ports or specific port information"
-    echo "  -d, --docker [container_name] List Docker images and containers or specific container info"
-    echo "  -n, --nginx [domain]        Display Nginx domains or specific domain info"
-    echo "  -u, --users [username]      List users and last logins or specific user info"
+    echo "  -p, --port [port_number]        Display active ports or specific port information"
+    echo "  -d, --docker [container_name]   List Docker images and containers or specific container info"
+    echo "  -n, --nginx [domain]            Display Nginx domains or specific domain info"
+    echo "  -u, --users [username]          List users and last logins or specific user info"
     echo "  -t, --time [start_time] [end_time] Display activities within a specified time range"
-    echo "  -h, --help                  Display this help message"
+    echo "  -h, --help                      Display this help message"
 }
 
-if [[ "$#" -eq 0 ]]; then
+run_continuous_monitoring() {
     while true; do
         echo "Running devopsfetch script at $(date)"
 
@@ -31,6 +31,10 @@ if [[ "$#" -eq 0 ]]; then
 
         sleep 60
     done
+}
+
+if [[ "$#" -eq 0 ]]; then
+    run_continuous_monitoring
 else
     while [[ "$1" != "" ]]; do
         case $1 in
