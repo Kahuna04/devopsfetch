@@ -1,13 +1,16 @@
 #!/bin/bash
 
+# Determine the directory of the script
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 LOG_FILE="/var/log/devopsfetch/devopsfetch.log"
 exec > >(tee -a $LOG_FILE) 2>&1
 
-source /home/ubuntu/devopsfetch/fetch_ports.sh
-source /home/ubuntu/devopsfetch/fetch_docker.sh
-source /home/ubuntu/devopsfetch/fetch_nginx.sh
-source /home/ubuntu/devopsfetch/fetch_users.sh
-source /home/ubuntu/devopsfetch/fetch_time.sh
+source "$SCRIPT_DIR/fetch_ports.sh"
+source "$SCRIPT_DIR/fetch_docker.sh"
+source "$SCRIPT_DIR/fetch_nginx.sh"
+source "$SCRIPT_DIR/fetch_users.sh"
+source "$SCRIPT_DIR/fetch_time.sh"
 
 display_help() {
     echo "Usage: $0 [option] [argument]"
