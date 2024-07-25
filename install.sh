@@ -7,6 +7,10 @@ sudo apt install -y net-tools docker.io finger
 # Make scripts executable
 chmod +x devopsfetch fetch_ports.sh fetch_docker.sh fetch_nginx.sh fetch_users.sh fetch_time.sh
 
+# Create log directory with proper permissions
+sudo mkdir -p /var/log/devopsfetch
+sudo chown $(whoami):$(whoami) /var/log/devopsfetch
+
 # Copy the main script to /usr/local/bin
 sudo cp devopsfetch /usr/local/bin/devopsfetch
 
@@ -17,7 +21,7 @@ Description=DevOps Fetch Service
 After=network.target
 
 [Service]
-ExecStart=$(pwd)/devopsfetch
+ExecStart=/usr/local/bin/devopsfetch
 Restart=always
 User=$(whoami)
 Group=$(whoami)
@@ -34,14 +38,14 @@ sudo systemctl start devopsfetch
 
 # Configure logrotate
 cat <<EOF | sudo tee /etc/logrotate.d/devopsfetch
-/var/log/devopsfetch.log {
+/var/log/devopsfetch/*.log {
     daily
     rotate 7
     compress
     delaycompress
     missingok
     notifempty
-    create 0640 root adm
+    create 0640 $(whoami) $(whoami)
     sharedscripts
     postrotate
         systemctl reload devopsfetch > /dev/null 2>/dev/null || true
@@ -49,4 +53,4 @@ cat <<EOF | sudo tee /etc/logrotate.d/devopsfetch
 }
 EOF
 
-echo "Installation complete. The devopsfetch service is running and logging to /var/log/devopsfetch.log."
+echo "Installation complete. The devopsfetch service is running and logging to /var/log/devopsfetch/devopsfetch.log."
