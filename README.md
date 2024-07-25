@@ -23,7 +23,7 @@ The DevOps Fetch Tool (`devopsfetch.sh`) is a comprehensive system information g
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/kahuna04/devopsfetchgit
+   git clone https://github.com/kahuna04/devopsfetch.git
    cd devopsfetch
    ```
 
