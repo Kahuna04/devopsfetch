@@ -1,20 +1,15 @@
 #!/bin/bash
 
-# Path for log file
 LOG_FILE="/var/log/devopsfetch.log"
-
-# Ensure log file exists and is writable
 touch "$LOG_FILE"
 chmod 644 "$LOG_FILE"
 
-# Function to append output to log file
 log_output() {
     while IFS= read -r line; do
         echo "$(date): $line" | tee -a "$LOG_FILE"
     done
 }
 
-# Function to display help
 show_help() {
     cat << EOF
 Usage: ${0##*/} [-p [PORT]] [-d [CONTAINER]] [-n [DOMAIN]] [-u [USERNAME]] [-t [TIMERANGE]] [-c] [-h]
@@ -22,13 +17,12 @@ Usage: ${0##*/} [-p [PORT]] [-d [CONTAINER]] [-n [DOMAIN]] [-u [USERNAME]] [-t [
     -d [CONTAINER]      List all Docker images and containers or a specific container if provided.
     -n [DOMAIN]         Display Nginx domain configurations or a specific domain if provided.
     -u [USERNAME]       List all users and their last login times or specific user info if provided.
-    -t [TIMERANGE]      Display system activities within the specified time range.
+    -t [TIMERANGE]]     Display system activities within the specified time range.
     -c                  Run in continuous monitoring mode.
     -h                  Display this help and exit.
 EOF
 }
 
-# Function for Ports Information
 ports() {
     if [[ "$1" =~ ^-|^$ ]]; then
         echo "Displaying all active ports:"
@@ -39,7 +33,6 @@ ports() {
     fi
 }
 
-# Function for Docker Information
 docker_info() {
     if [[ "$1" =~ ^-|^$ ]]; then
         echo "Displaying all Docker containers and images:"
@@ -51,7 +44,6 @@ docker_info() {
     fi
 }
 
-# Function for Nginx Configuration
 nginx_config() {
     if [[ "$1" =~ ^-|^$ ]]; then
         echo "Displaying all Nginx configurations:"
@@ -62,7 +54,6 @@ nginx_config() {
     fi
 }
 
-# Function for User Logins
 user_logins() {
     if [[ "$1" =~ ^-|^$ ]]; then
         echo "Listing all user login times:"
@@ -73,7 +64,6 @@ user_logins() {
     fi
 }
 
-# Function for Time Range Logs
 time_range() {
     if [[ "$1" =~ ^-|^$ ]]; then
         echo "Error: -t requires a time range argument."
@@ -85,18 +75,16 @@ time_range() {
     fi
 }
 
-# Continuous monitoring mode
 continuous_monitoring() {
     while true; do
         ports
         docker_info
         nginx_config
         user_logins
-        sleep 300  # Run every 5 minutes
+        sleep 300
     done
 }
 
-# Parse command-line options
 while getopts ":p::d::n::u::t:ch" opt; do
     case "$opt" in
         p) ports "$OPTARG" ;;
@@ -113,7 +101,6 @@ while getopts ":p::d::n::u::t:ch" opt; do
     esac
 done
 
-# Default to show help if no arguments
 if [ $OPTIND -eq 1 ]; then
     show_help
     exit 1
