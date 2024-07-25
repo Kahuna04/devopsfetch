@@ -26,7 +26,7 @@ The tool offers both standalone execution and continuous monitoring capabilities
 1. **Clone the Repository:**
 
    ```bash
-   git clone https://github.com/Mobey-eth/Hng_stage_5-midway-task.git
+   git clone https://github.com/kahuna04/devopsfetch.git
    cd devopsfetch
    ```
 
