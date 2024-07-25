@@ -8,14 +8,11 @@ sudo apt install -y net-tools docker.io finger
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Make scripts executable
-chmod +x "$SCRIPT_DIR/devopsfetch" "$SCRIPT_DIR/fetch_ports.sh" "$SCRIPT_DIR/fetch_docker.sh" "$SCRIPT_DIR/fetch_nginx.sh" "$SCRIPT_DIR/fetch_users.sh" "$SCRIPT_DIR/fetch_time.sh"
+chmod +x "$SCRIPT_DIR/devopsfetch.sh" "$SCRIPT_DIR/fetch_ports.sh" "$SCRIPT_DIR/fetch_docker.sh" "$SCRIPT_DIR/fetch_nginx.sh" "$SCRIPT_DIR/fetch_users.sh" "$SCRIPT_DIR/fetch_time.sh"
 
 # Create log directory with proper permissions
 sudo mkdir -p /var/log/devopsfetch
 sudo chown "$(whoami):$(whoami)" /var/log/devopsfetch
-
-# Copy the main script to /usr/local/bin
-sudo cp "$SCRIPT_DIR/devopsfetch" /usr/local/bin/devopsfetch
 
 # Create systemd service file
 cat <<EOF | sudo tee /etc/systemd/system/devopsfetch.service
@@ -24,7 +21,7 @@ Description=DevOps Fetch Service
 After=network.target
 
 [Service]
-ExecStart=/usr/local/bin/devopsfetch
+ExecStart=$SCRIPT_DIR/devopsfetch.sh
 Restart=always
 User=$(whoami)
 Group=$(whoami)
