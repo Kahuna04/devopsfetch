@@ -36,4 +36,3 @@ get_nginx_domain_info() {
         echo "Nginx configuration file for domain $domain does not exist."
     fi
 }
-
