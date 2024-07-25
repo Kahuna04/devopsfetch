@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Determine the directory of the script
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 LOG_FILE="/var/log/devopsfetch/devopsfetch.log"
@@ -82,7 +81,7 @@ else
                 if [ "$1" ]; then
                     get_activities_in_time_range $1
                 else
-                    echo "Please provide a date in the format YYYY-MM-DD."
+                    echo "Please provide a date in the format YYYY-MM-DD.."
                     exit 1
                 fi
                 exit
