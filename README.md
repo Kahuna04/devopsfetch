@@ -82,7 +82,7 @@ The `devopsfetch.service` file handles the service configuration. You can modify
 
 * **`-t` (Time Range):**
 
-   * `./devopsfetch -t "2024-01-01 00:00:00" "2024-12-31 23:59:59"`: Display activities within a specified time range.
+   * `./devopsfetch -t "YYY-MM-DD"`: Display activities within a specified date.
 
 * **`-h` (Help):**
 
