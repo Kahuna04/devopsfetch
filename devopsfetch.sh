@@ -19,8 +19,8 @@ show_help() {
     cat << EOF
 Usage: ${0##*/} [-p [PORT]] [-d [CONTAINER]] [-n [DOMAIN]] [-u [USERNAME]] [-t [TIMERANGE]] [-c] [-h]
     -p [PORT]           Display all active ports or a specific port if provided.
-    -d [CONTAINER]      List all Docker images and containers or a specific container if provided.
-    -n [DOMAIN]         Display Nginx domain configurations or a specific domain if provided.
+    -d [CONTAINER]]     List all Docker images and containers or a specific container if provided.
+    -n [DOMAIN]]        Display Nginx domain configurations or a specific domain if provided.
     -u [USERNAME]]      List all users and their last login times or specific user info if provided.
     -t [TIMERANGE]]     Display system activities within the specified time range.
     -c                  Run in continuous monitoring mode.
@@ -30,7 +30,7 @@ EOF
 
 # Function for Ports Information
 ports() {
-    if [[ "$1" =~ ^-|^$ ]]; then
+    if [ -z "$1" ]; then
         echo "Displaying all active ports:" | log_output
         sudo netstat -tulnp | grep LISTEN | log_output
     else
@@ -41,19 +41,19 @@ ports() {
 
 # Function for Docker Information
 docker_info() {
-    if [[ "$1" =~ ^-|^$ ]]; then
+    if [ -z "$1" ]; then
         echo "Displaying all Docker containers and images:" | log_output
         docker ps -a | log_output
         docker images | log_output
     else
         echo "Detailed information for Docker container $1:" | log_output
-        docker inspect "$1" | log_output
+        docker inspect "$1" | log_output || echo "Error: No such object: $1" | log_output
     fi
 }
 
 # Function for Nginx Configuration
 nginx_config() {
-    if [[ "$1" =~ ^-|^$ ]]; then
+    if [ -z "$1" ]; then
         echo "Displaying all Nginx configurations:" | log_output
         grep server_name /etc/nginx/sites-enabled/* -R | log_output
     else
@@ -64,7 +64,7 @@ nginx_config() {
 
 # Function for User Logins
 user_logins() {
-    if [[ "$1" =~ ^-|^$ ]]; then
+    if [ -z "$1" ]; then
         echo "Listing all user login times:" | log_output
         lastlog | log_output
     else
@@ -75,7 +75,7 @@ user_logins() {
 
 # Function for Time Range Logs
 time_range() {
-    if [[ "$1" =~ ^-|^$ ]]; then
+    if [ -z "$1" ]; then
         echo "Error: -t requires a time range argument." | log_output
         show_help
         exit 1
