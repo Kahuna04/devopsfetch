@@ -1,6 +1,6 @@
 #!/bin/bash
 
-LOG_FILE="/var/log/devopsfetch.log"
+LOG_FILE="/var/log/devopsfetch/devopsfetch.log"
 exec > >(tee -a $LOG_FILE) 2>&1
 
 source /home/ubuntu/devopsfetch/fetch_ports.sh
@@ -89,11 +89,11 @@ else
                 exit
                 ;;
             * )
-                display_help                exit 1
+                display_help
+                exit 1
         esac
         shift
     done
 
     display_help
 fi
-
