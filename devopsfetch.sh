@@ -19,10 +19,10 @@ show_help() {
     cat << EOF
 Usage: ${0##*/} [-p [PORT]] [-d [CONTAINER]] [-n [DOMAIN]] [-u [USERNAME]] [-t [TIMERANGE]] [-c] [-h]
     -p [PORT]           Display all active ports or a specific port if provided.
-    -d [CONTAINER]]     List all Docker images and containers or a specific container if provided.
-    -n [DOMAIN]]        Display Nginx domain configurations or a specific domain if provided.
-    -u [USERNAME]]      List all users and their last login times or specific user info if provided.
-    -t [TIMERANGE]]     Display system activities within the specified time range.
+    -d [CONTAINER]      List all Docker images and containers or a specific container if provided.
+    -n [DOMAIN]         Display Nginx domain configurations or a specific domain if provided.
+    -u [USERNAME]       List all users and their last login times or specific user info if provided.
+    -t [TIMERANGE]      Display system activities within the specified time range.
     -c                  Run in continuous monitoring mode.
     -h                  Display this help and exit.
 EOF
@@ -63,13 +63,24 @@ nginx_config() {
 }
 
 # Function for User Logins
+list_users_and_last_logins() {
+    echo "Users and Last Logins:" | log_output
+    echo "User     Terminal  Login Time          Duration" | log_output
+    echo "-------------------------------------------------" | log_output
+    last -a | awk '{if ($1 != last_user) {printf "%-8s %-9s %-19s %-10s\n", $1, $2, $3" "$4" "$5, $6; last_user=$1}}' | log_output
+}
+
+get_user_info() {
+    local username=$1
+    echo "Information for User $username:" | log_output
+    finger $username | log_output
+}
+
 user_logins() {
     if [ -z "$1" ]; then
-        echo "Listing all user login times:" | log_output
-        lastlog | log_output
+        list_users_and_last_logins
     else
-        echo "Last login time for user $1:" | log_output
-        lastlog | grep "$1" | log_output
+        get_user_info "$1"
     fi
 }
 
